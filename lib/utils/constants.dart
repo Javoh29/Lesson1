@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../price_model.dart';
+import '../wallet_ui/price_model.dart';
 
-const Color scaffoldColor = Color(0xffffffff);
-const Color accentColor = Color(0xff4AADFB);
-const Color textColor1 = Color(0xff010101);
 
-TextStyle kTextStyle({Color? color, double size = 14, FontWeight fontWeight = FontWeight.w500, double? letterSpacing}) {
-  return TextStyle(color: color ?? textColor1, fontSize: size, fontWeight: fontWeight, letterSpacing: letterSpacing);
+TextStyle kTextStyle({Color? color, double size = 14, FontWeight fontWeight = FontWeight.w500, double? letterSpacing, double? height}) {
+  return TextStyle(color: color ?? Colors.white, fontSize: size, fontWeight: fontWeight, letterSpacing: letterSpacing, height: height);
 }
 
 List<PriceModel> listPrices = [
