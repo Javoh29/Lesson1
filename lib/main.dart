@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lesson1/nft_ui/discover_page.dart';
+import 'package:lesson1/nft_ui/auction_page.dart';
+import 'package:lesson1/utils/routes.dart';
 
 void main() {
   runApp(const LessonApp());
@@ -13,10 +13,12 @@ class LessonApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: DiscoverPage(),
-      theme: ThemeData(
-        textTheme: GoogleFonts.epilogueTextTheme(),
-      ),
+      // theme: ThemeData(
+      //   textTheme: GoogleFonts.robotoTextTheme(),
+      //   primaryTextTheme: GoogleFonts.robotoTextTheme(),
+      //   accentTextTheme: GoogleFonts.robotoTextTheme()
+      // ),
+      onGenerateRoute: (settings) => Routes.generateRoute(settings),
     );
   }
 }

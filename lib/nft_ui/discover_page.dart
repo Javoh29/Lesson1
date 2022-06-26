@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:lesson1/utils/constants.dart';
 
 class DiscoverPage extends StatelessWidget {
-  const DiscoverPage({Key? key}) : super(key: key);
+  const DiscoverPage(this.title, {Key? key}) : super(key: key);
+
+  final String title;
 
   final Color scaffoldColor = const Color(0xfff8f8f8);
   final Color textColor1 = const Color(0xff333333);
@@ -17,9 +19,11 @@ class DiscoverPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: scaffoldColor,
         elevation: 0,
-        title: Image.asset(
-          'assets/app_logo.png',
-          height: 37,
+        iconTheme: IconThemeData(color: textColor1),
+        leading: IconButton(onPressed: () => Navigator.pop(context, 'BUTTON'), icon: const Icon(Icons.arrow_back)),
+        title: Text(
+          title,
+          style: kTextStyle(color: textColor1, size: 18, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -204,31 +208,13 @@ class DiscoverPage extends StatelessWidget {
                 style: kTextStyle(size: 20, color: textColor1, fontWeight: FontWeight.bold),
               ),
               style: buttonStyle(
-                borderRadius: 8,
-                side: const BorderSide(color: Color(0xff0038F5), width: 1),
-                padding: const EdgeInsets.symmetric(vertical: 15)
-              ),
+                  borderRadius: 8,
+                  side: const BorderSide(color: Color(0xff0038F5), width: 1),
+                  padding: const EdgeInsets.symmetric(vertical: 15)),
             ),
           )
         ],
       ),
     );
-  }
-
-  ButtonStyle buttonStyle(
-      {Color? color,
-      Color? shadowColor,
-      double? elevation,
-      EdgeInsets? padding,
-      double? borderRadius,
-      BorderSide? side}) {
-    return ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(color),
-        shadowColor: MaterialStateProperty.all(shadowColor),
-        elevation: MaterialStateProperty.all(elevation),
-        padding: MaterialStateProperty.all(padding),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? 0), side: side ?? BorderSide.none),
-        ));
   }
 }
