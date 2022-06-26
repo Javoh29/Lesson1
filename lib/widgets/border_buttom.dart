@@ -5,14 +5,17 @@ class UnicornOutlineButton extends StatelessWidget {
   final Widget _child;
   final VoidCallback _callback;
   final double _radius;
+  final double strokeWidth;
+  final Color? bgColor;
 
   UnicornOutlineButton({
     Key? key,
-    required double strokeWidth,
+    required this.strokeWidth,
     required double radius,
     required Gradient gradient,
     required Widget child,
     required VoidCallback onPressed,
+    this.bgColor,
   })  : _painter = _GradientPainter(strokeWidth: strokeWidth, radius: radius, gradient: gradient),
         _child = child,
         _callback = onPressed,
@@ -28,6 +31,8 @@ class UnicornOutlineButton extends StatelessWidget {
         onTap: _callback,
         child: Container(
           constraints: const BoxConstraints(minWidth: 88, minHeight: 48),
+          margin: EdgeInsets.all(strokeWidth),
+          decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(_radius)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
