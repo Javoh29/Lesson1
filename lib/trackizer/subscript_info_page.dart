@@ -93,7 +93,7 @@ class SubscriptInfoPage extends StatelessWidget {
                                   radius: 16,
                                   onPressed: () {},
                                   bgColor: const Color(0xff30303d),
-                                  child: Column(
+                                  child: Column( 
                                     children: [
                                       
                                     ],

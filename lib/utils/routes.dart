@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:lesson1/lesson_page.dart';
 import 'package:lesson1/nft_ui/auction_page.dart';
 import 'package:lesson1/nft_ui/discover_page.dart';
 import 'package:lesson1/trackizer/subscript_info_page.dart';
 
 class Routes {
-  static const subscriptInfoPage = '/';
+  static const subscriptInfoPage = '/subscriptInfoPage';
   static const auctionPage = '/auctionPage';
   static const discoverPage = '/discoverPage';
+  static const lessonPage = '/';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     try {
@@ -17,6 +19,8 @@ class Routes {
           return MaterialPageRoute(builder: (context) => const SubscriptInfoPage());
         case auctionPage:
           return MaterialPageRoute(builder: (context) => const AuctionPage());
+        case lessonPage:
+          return MaterialPageRoute(builder: (context) => const LessonPage());
         case discoverPage:
           return MaterialPageRoute(builder: (context) => DiscoverPage(args?['title'] ?? ''));
         default:
