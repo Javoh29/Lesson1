@@ -14,8 +14,9 @@ class _AuctionPageState extends State<AuctionPage> {
 
   final Color textColor1 = const Color(0xff333333);
 
-  final Gradient _gradient =
-      const LinearGradient(colors: [Color(0xff0038F5), Color(0xff9F03FF)], transform: GradientRotation(45));
+  final Gradient _gradient = const LinearGradient(
+      colors: [Color(0xff0038F5), Color(0xff9F03FF)],
+      transform: GradientRotation(45));
 
   String btnName = 'Place a bid';
 
@@ -63,7 +64,10 @@ class _AuctionPageState extends State<AuctionPage> {
                 Expanded(
                   child: Text(
                     'Silent Color',
-                    style: kTextStyle(color: textColor1, size: 24, fontWeight: FontWeight.bold),
+                    style: kTextStyle(
+                        color: textColor1,
+                        size: 24,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 InkWell(
@@ -147,7 +151,10 @@ class _AuctionPageState extends State<AuctionPage> {
                   ),
                   label: Text(
                     '@openart',
-                    style: kTextStyle(size: 16, color: textColor1, fontWeight: FontWeight.bold),
+                    style: kTextStyle(
+                        size: 16,
+                        color: textColor1,
+                        fontWeight: FontWeight.bold),
                   ),
                   style: buttonStyle(
                     color: Colors.white,
@@ -164,7 +171,11 @@ class _AuctionPageState extends State<AuctionPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               data,
-              style: kTextStyle(color: textColor1, size: 13, fontWeight: FontWeight.w500, height: 1.5),
+              style: kTextStyle(
+                  color: textColor1,
+                  size: 13,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5),
             ),
           ),
           Padding(
@@ -200,7 +211,8 @@ class _AuctionPageState extends State<AuctionPage> {
               children: [
                 Text(
                   'Current Bid',
-                  style: kTextStyle(color: textColor1, size: 20, fontWeight: FontWeight.w500),
+                  style: kTextStyle(
+                      color: textColor1, size: 20, fontWeight: FontWeight.w500),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 20),
@@ -208,14 +220,20 @@ class _AuctionPageState extends State<AuctionPage> {
                     children: [
                       Text(
                         '0.50 ETH',
-                        style: kTextStyle(size: 24, fontWeight: FontWeight.bold, color: textColor1),
+                        style: kTextStyle(
+                            size: 24,
+                            fontWeight: FontWeight.bold,
+                            color: textColor1),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
                         '\$2,683.73',
-                        style: kTextStyle(size: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+                        style: kTextStyle(
+                            size: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54),
                       ),
                     ],
                   ),
@@ -238,8 +256,8 @@ class _AuctionPageState extends State<AuctionPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () =>
-                      Navigator.pushNamed(context, Routes.discoverPage, arguments: {'title': 'ART'}).then((value) {
+                  onTap: () => Navigator.pushNamed(context, Routes.discoverPage,
+                      arguments: {'title': 'ART'}).then((value) {
                     if (value is String) {
                       setState(() {
                         btnName = value;
@@ -308,7 +326,8 @@ class _AuctionPageState extends State<AuctionPage> {
             ),
             Text(
               'June 06, 2021 at 12:00am',
-              style: kTextStyle(size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
+              style: kTextStyle(
+                  size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
             )
           ],
         ),
@@ -319,11 +338,15 @@ class _AuctionPageState extends State<AuctionPage> {
             children: [
               Text(
                 '1.50 ETH',
-                style: kTextStyle(size: 16, fontWeight: FontWeight.bold, color: textColor1),
+                style: kTextStyle(
+                    size: 16, fontWeight: FontWeight.bold, color: textColor1),
               ),
               Text(
                 '\$2,683.73',
-                style: kTextStyle(size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
+                style: kTextStyle(
+                    size: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54),
               )
             ],
           ),
@@ -340,7 +363,8 @@ class _AuctionPageState extends State<AuctionPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       ),
     );
   }
@@ -351,11 +375,13 @@ class _AuctionPageState extends State<AuctionPage> {
       children: [
         Text(
           title,
-          style: kTextStyle(size: 24, fontWeight: FontWeight.bold, color: textColor1),
+          style: kTextStyle(
+              size: 24, fontWeight: FontWeight.bold, color: textColor1),
         ),
         Text(
           subtitle,
-          style: kTextStyle(size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
+          style: kTextStyle(
+              size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
         )
       ],
     );
@@ -380,7 +406,8 @@ class _AuctionPageState extends State<AuctionPage> {
         leading: Icon(icon, color: textColor1, size: 30),
         title: Text(
           title,
-          style: kTextStyle(size: 16, color: textColor1, fontWeight: FontWeight.bold),
+          style: kTextStyle(
+              size: 16, color: textColor1, fontWeight: FontWeight.bold),
         ),
         trailing: const Icon(
           Icons.launch,
@@ -404,7 +431,8 @@ class _AuctionPageState extends State<AuctionPage> {
         ),
         child: Text(
           text,
-          style: kTextStyle(size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
+          style: kTextStyle(
+              size: 13, fontWeight: FontWeight.w500, color: Colors.black54),
         ),
       ),
     );

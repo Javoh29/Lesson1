@@ -12,14 +12,20 @@ class MyPainter extends CustomPainter {
     path = Path();
     path.lineTo(0, 0);
     path.cubicTo(0, 0, size.width, 0, size.width, 0);
-    path.cubicTo(size.width, 0, size.width, size.height * 0.96, size.width, size.height * 0.96);
-    path.cubicTo(size.width, size.height * 0.96, size.width, size.height * 0.96, size.width, size.height * 0.96);
-    path.cubicTo(
-        size.width * 0.98, size.height * 0.96, size.width * 0.96, size.height * 0.98, size.width * 0.96, size.height);
-    path.cubicTo(size.width * 0.96, size.height, size.width * 0.96, size.height, size.width * 0.96, size.height);
-    path.cubicTo(size.width * 0.96, size.height, size.width * 0.04, size.height, size.width * 0.04, size.height);
-    path.cubicTo(size.width * 0.04, size.height, size.width * 0.04, size.height, size.width * 0.04, size.height);
-    path.cubicTo(size.width * 0.04, size.height * 0.98, size.width * 0.02, size.height * 0.96, 0, size.height * 0.96);
+    path.cubicTo(size.width, 0, size.width, size.height * 0.96, size.width,
+        size.height * 0.96);
+    path.cubicTo(size.width, size.height * 0.96, size.width, size.height * 0.96,
+        size.width, size.height * 0.96);
+    path.cubicTo(size.width * 0.98, size.height * 0.96, size.width * 0.96,
+        size.height * 0.98, size.width * 0.96, size.height);
+    path.cubicTo(size.width * 0.96, size.height, size.width * 0.96, size.height,
+        size.width * 0.96, size.height);
+    path.cubicTo(size.width * 0.96, size.height, size.width * 0.04, size.height,
+        size.width * 0.04, size.height);
+    path.cubicTo(size.width * 0.04, size.height, size.width * 0.04, size.height,
+        size.width * 0.04, size.height);
+    path.cubicTo(size.width * 0.04, size.height * 0.98, size.width * 0.02,
+        size.height * 0.96, 0, size.height * 0.96);
     path.cubicTo(0, size.height * 0.96, 0, 0, 0, 0);
     path.cubicTo(0, 0, 0, 0, 0, 0);
     canvas.drawPath(path, paint);

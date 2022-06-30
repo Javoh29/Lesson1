@@ -9,8 +9,9 @@ class DiscoverPage extends StatelessWidget {
 
   final Color scaffoldColor = const Color(0xfff8f8f8);
   final Color textColor1 = const Color(0xff333333);
-  final Gradient _gradient =
-      const LinearGradient(colors: [Color(0xff0038F5), Color(0xff9F03FF)], transform: GradientRotation(45));
+  final Gradient _gradient = const LinearGradient(
+      colors: [Color(0xff0038F5), Color(0xff9F03FF)],
+      transform: GradientRotation(45));
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +21,13 @@ class DiscoverPage extends StatelessWidget {
         backgroundColor: scaffoldColor,
         elevation: 0,
         iconTheme: IconThemeData(color: textColor1),
-        leading: IconButton(onPressed: () => Navigator.pop(context, 'BUTTON'), icon: const Icon(Icons.arrow_back)),
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context, 'BUTTON'),
+            icon: const Icon(Icons.arrow_back)),
         title: Text(
           title,
-          style: kTextStyle(color: textColor1, size: 18, fontWeight: FontWeight.bold),
+          style: kTextStyle(
+              color: textColor1, size: 18, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -52,14 +56,22 @@ class DiscoverPage extends StatelessWidget {
               Text(
                 'Discover creator',
                 style: kTextStyle(
-                    size: 20, color: textColor1, fontWeight: FontWeight.bold, letterSpacing: -0.5, height: 1.28),
+                    size: 20,
+                    color: textColor1,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
+                    height: 1.28),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 25),
                 child: Text(
                   'Follow at least five creators\nto build your feed…',
                   textAlign: TextAlign.center,
-                  style: kTextStyle(size: 16, color: textColor1, fontWeight: FontWeight.w400, height: 1.2),
+                  style: kTextStyle(
+                      size: 16,
+                      color: textColor1,
+                      fontWeight: FontWeight.w400,
+                      height: 1.2),
                 ),
               ),
             ],
@@ -88,7 +100,9 @@ class DiscoverPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   margin: const EdgeInsets.only(left: 10),
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(21), color: const Color(0xffF0F0F0)),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(21),
+                      color: const Color(0xffF0F0F0)),
                   child: Text(
                     'All Creator',
                     style: kTextStyle(size: 16, color: textColor1),
@@ -137,7 +151,9 @@ class DiscoverPage extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 5),
-                        image: const DecorationImage(image: AssetImage('assets/img_user.png'), fit: BoxFit.cover),
+                        image: const DecorationImage(
+                            image: AssetImage('assets/img_user.png'),
+                            fit: BoxFit.cover),
                       ),
                     )
                   ],
@@ -146,7 +162,10 @@ class DiscoverPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
                     'Kennedy Yanko',
-                    style: kTextStyle(size: 24, fontWeight: FontWeight.bold, color: textColor1),
+                    style: kTextStyle(
+                        size: 24,
+                        fontWeight: FontWeight.bold,
+                        color: textColor1),
                   ),
                 ),
                 Padding(
@@ -154,23 +173,31 @@ class DiscoverPage extends StatelessWidget {
                   child: Text(
                     'Kennedy Yanko is an artist working in found metal and paint skin. Her methods reflect a dual abstract expressionist-surr…',
                     textAlign: TextAlign.center,
-                    style: kTextStyle(size: 16, color: textColor1, height: 1.35),
+                    style:
+                        kTextStyle(size: 16, color: textColor1, height: 1.35),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         '2024',
-                        style: kTextStyle(color: textColor1, size: 32, fontWeight: FontWeight.bold),
+                        style: kTextStyle(
+                            color: textColor1,
+                            size: 32,
+                            fontWeight: FontWeight.bold),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 5, bottom: 5),
                         child: Text(
                           'Followers',
-                          style: kTextStyle(size: 16, color: Colors.black54, fontWeight: FontWeight.w500),
+                          style: kTextStyle(
+                              size: 16,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                       const Spacer(),
@@ -185,7 +212,10 @@ class DiscoverPage extends StatelessWidget {
                         ),
                         child: Text(
                           'Follow',
-                          style: kTextStyle(color: textColor1, size: 16, fontWeight: FontWeight.bold),
+                          style: kTextStyle(
+                              color: textColor1,
+                              size: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -205,7 +235,8 @@ class DiscoverPage extends StatelessWidget {
               ),
               label: Text(
                 'Load more',
-                style: kTextStyle(size: 20, color: textColor1, fontWeight: FontWeight.bold),
+                style: kTextStyle(
+                    size: 20, color: textColor1, fontWeight: FontWeight.bold),
               ),
               style: buttonStyle(
                   borderRadius: 8,

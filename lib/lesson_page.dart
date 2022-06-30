@@ -44,7 +44,8 @@ class _LessonPageState extends State<LessonPage> {
               keyboardType: TextInputType.text,
               autofocus: true,
               autocorrect: true,
-              style: kTextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style:
+                  kTextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               validator: (value) {
                 final nameExp = RegExp(r'^[A-Za-z ]+$');
                 if (value?.isEmpty == true) {
@@ -70,7 +71,10 @@ class _LessonPageState extends State<LessonPage> {
                 prefix: Text('+998 '),
               ),
               keyboardType: TextInputType.text,
-              inputFormatters: [FilteringTextInputFormatter(RegExp(r'^[()\d -]{1,9}$'), allow: true)],
+              inputFormatters: [
+                FilteringTextInputFormatter(RegExp(r'^[()\d -]{1,9}$'),
+                    allow: true)
+              ],
               validator: (value) {
                 final phoneExp = RegExp(r'^\d\d\d-\d\d-\d\d');
                 if (value?.isEmpty == true) {
@@ -89,7 +93,8 @@ class _LessonPageState extends State<LessonPage> {
               validator: (value) {
                 if (value?.isEmpty == true) {
                   return 'Email address required';
-                } else if (value?.contains('@') == false || value?.contains('.') == false) {
+                } else if (value?.contains('@') == false ||
+                    value?.contains('.') == false) {
                   return 'Invalid emain address';
                 }
                 return null;
@@ -105,13 +110,19 @@ class _LessonPageState extends State<LessonPage> {
             TextFormField(
               obscureText: _isHidden,
               decoration: InputDecoration(
-                labelText: "Password",
-                suffix: IconButton(onPressed: () {
-                  setState(() {
-                    _isHidden = !_isHidden;
-                  });
-                }, icon: Icon(_isHidden ? Icons.remove_red_eye : Icons.panorama_fish_eye,color: Colors.grey,))
-              ),
+                  labelText: "Password",
+                  suffix: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isHidden = !_isHidden;
+                        });
+                      },
+                      icon: Icon(
+                        _isHidden
+                            ? Icons.remove_red_eye
+                            : Icons.panorama_fish_eye,
+                        color: Colors.grey,
+                      ))),
               keyboardType: TextInputType.number,
             ),
             TextFormField(

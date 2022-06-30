@@ -16,7 +16,8 @@ class UnicornOutlineButton extends StatelessWidget {
     required Widget child,
     required VoidCallback onPressed,
     this.bgColor,
-  })  : _painter = _GradientPainter(strokeWidth: strokeWidth, radius: radius, gradient: gradient),
+  })  : _painter = _GradientPainter(
+            strokeWidth: strokeWidth, radius: radius, gradient: gradient),
         _child = child,
         _callback = onPressed,
         _radius = radius,
@@ -32,7 +33,8 @@ class UnicornOutlineButton extends StatelessWidget {
         child: Container(
           constraints: const BoxConstraints(minWidth: 88, minHeight: 48),
           margin: EdgeInsets.all(strokeWidth),
-          decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(_radius)),
+          decoration: BoxDecoration(
+              color: bgColor, borderRadius: BorderRadius.circular(_radius)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -62,12 +64,14 @@ class _GradientPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // create outer rectangle equals size
     Rect outerRect = Offset.zero & size;
-    var outerRRect = RRect.fromRectAndRadius(outerRect, Radius.circular(radius));
+    var outerRRect =
+        RRect.fromRectAndRadius(outerRect, Radius.circular(radius));
 
     // create inner rectangle smaller by strokeWidth
-    Rect innerRect =
-        Rect.fromLTWH(strokeWidth, strokeWidth, size.width - strokeWidth * 2, size.height - strokeWidth * 2);
-    var innerRRect = RRect.fromRectAndRadius(innerRect, Radius.circular(radius - strokeWidth));
+    Rect innerRect = Rect.fromLTWH(strokeWidth, strokeWidth,
+        size.width - strokeWidth * 2, size.height - strokeWidth * 2);
+    var innerRRect = RRect.fromRectAndRadius(
+        innerRect, Radius.circular(radius - strokeWidth));
 
     // apply gradient shader
     _paint.shader = gradient.createShader(outerRect);

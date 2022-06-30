@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../wallet_ui/price_model.dart';
 
 TextStyle kTextStyle(
-    {Color? color, double size = 14, FontWeight fontWeight = FontWeight.w500, double? letterSpacing, double? height}) {
+    {Color? color,
+    double size = 14,
+    FontWeight fontWeight = FontWeight.w500,
+    double? letterSpacing,
+    double? height}) {
   return TextStyle(
       color: color ?? Colors.white,
       fontSize: size,
@@ -28,7 +32,9 @@ ButtonStyle buttonStyle({
       padding: MaterialStateProperty.all(padding),
       minimumSize: MaterialStateProperty.all(size),
       shape: MaterialStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? 0), side: side ?? BorderSide.none),
+        RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius ?? 0),
+            side: side ?? BorderSide.none),
       ));
 }
 

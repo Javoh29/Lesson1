@@ -18,7 +18,8 @@ class WalletPage extends StatelessWidget {
           width: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            image: const DecorationImage(image: AssetImage('assets/img_user.jpeg'), fit: BoxFit.cover),
+            image: const DecorationImage(
+                image: AssetImage('assets/img_user.jpeg'), fit: BoxFit.cover),
           ),
         ),
         leading: Padding(
@@ -54,7 +55,7 @@ class WalletPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 50, bottom: 15),
                 child: Text(
                   'Available Balance',
-                  style: kTextStyle( size: 16, fontWeight: FontWeight.w600),
+                  style: kTextStyle(size: 16, fontWeight: FontWeight.w600),
                 ),
               ),
               Text(
@@ -102,7 +103,8 @@ class WalletPage extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 10, right: 20),
                         child: Text(
                           'Send',
-                          style: kTextStyle(size: 17, fontWeight: FontWeight.bold),
+                          style:
+                              kTextStyle(size: 17, fontWeight: FontWeight.bold),
                         ),
                       )
                     ],
@@ -114,7 +116,8 @@ class WalletPage extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: const Color(0xffc8e7a6), width: 6),
+                    border:
+                        Border.all(color: const Color(0xffc8e7a6), width: 6),
                     borderRadius: BorderRadius.circular(35),
                   ),
                   child: const Icon(
@@ -129,7 +132,8 @@ class WalletPage extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: const Color(0xffffecc5), width: 6),
+                    border:
+                        Border.all(color: const Color(0xffffecc5), width: 6),
                     borderRadius: BorderRadius.circular(35),
                   ),
                   child: Image.asset(
@@ -177,7 +181,8 @@ class WalletPage extends StatelessWidget {
         ),
         trailing: Text(
           '-\$${model.price}',
-          style: kTextStyle(color: Colors.orange, size: 17, fontWeight: FontWeight.w600),
+          style: kTextStyle(
+              color: Colors.orange, size: 17, fontWeight: FontWeight.w600),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

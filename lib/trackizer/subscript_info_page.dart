@@ -9,8 +9,9 @@ class SubscriptInfoPage extends StatelessWidget {
   const SubscriptInfoPage({Key? key}) : super(key: key);
 
   final Color textColor1 = const Color(0xffA2A2B5);
-  final LinearGradient _gradient =
-      const LinearGradient(colors: [Colors.white24, Colors.transparent], transform: GradientRotation(45));
+  final LinearGradient _gradient = const LinearGradient(
+      colors: [Colors.white24, Colors.transparent],
+      transform: GradientRotation(45));
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +24,20 @@ class SubscriptInfoPage extends StatelessWidget {
             clipper: TicketClipper(),
             child: Container(
               width: double.infinity,
-              decoration: BoxDecoration(color: const Color(0xff353542), borderRadius: BorderRadius.circular(24)),
+              decoration: BoxDecoration(
+                  color: const Color(0xff353542),
+                  borderRadius: BorderRadius.circular(24)),
               child: LayoutBuilder(
                 builder: ((context, constraints) => Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 20),
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   IconButton(
                                       onPressed: () {},
@@ -44,7 +49,8 @@ class SubscriptInfoPage extends StatelessWidget {
                                       )),
                                   Text(
                                     'Subscription info',
-                                    style: kTextStyle(color: textColor1, size: 16),
+                                    style:
+                                        kTextStyle(color: textColor1, size: 16),
                                   ),
                                   IconButton(
                                       onPressed: () {},
@@ -56,7 +62,8 @@ class SubscriptInfoPage extends StatelessWidget {
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 25),
                                 child: Image.asset(
                                   'assets/spotify_logo.png',
                                   height: 106,
@@ -65,20 +72,25 @@ class SubscriptInfoPage extends StatelessWidget {
                               ),
                               Text(
                                 'Spotify',
-                                style: kTextStyle(size: 32, fontWeight: FontWeight.bold),
+                                style: kTextStyle(
+                                    size: 32, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 '\$5.99',
-                                style: kTextStyle(size: 20, color: textColor1, fontWeight: FontWeight.bold),
+                                style: kTextStyle(
+                                    size: 20,
+                                    color: textColor1,
+                                    fontWeight: FontWeight.bold),
                               )
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: constraints.maxHeight / 2.2),
+                          padding:
+                              EdgeInsets.only(top: constraints.maxHeight / 2.2),
                           child: Column(
                             children: [
                               const LineDash(
@@ -86,17 +98,16 @@ class SubscriptInfoPage extends StatelessWidget {
                               ),
                               Container(
                                 width: double.infinity,
-                                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 30),
                                 child: UnicornOutlineButton(
                                   gradient: _gradient,
                                   strokeWidth: 1,
                                   radius: 16,
                                   onPressed: () {},
                                   bgColor: const Color(0xff30303d),
-                                  child: Column( 
-                                    children: [
-                                      
-                                    ],
+                                  child: Column(
+                                    children: [],
                                   ),
                                 ),
                               )
