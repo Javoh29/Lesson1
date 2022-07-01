@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:lesson1/currency/currency_model.dart';
 import 'package:lesson1/utils/constants.dart';
+import 'package:lesson1/utils/routes.dart';
 
 class ComparePage extends StatefulWidget {
   const ComparePage({Key? key}) : super(key: key);
@@ -16,6 +18,8 @@ class ComparePage extends StatefulWidget {
 class _ComparePageState extends State<ComparePage> {
   final TextEditingController _editingControllerTop = TextEditingController();
   final TextEditingController _editingControllerBottom = TextEditingController();
+  final FocusNode _topFocus = FocusNode();
+  final FocusNode _bottomFocus = FocusNode();
   final List<CurrencyModel> _listCurrency = [];
   CurrencyModel? topCur;
   CurrencyModel? bottomCur;
@@ -24,10 +28,32 @@ class _ComparePageState extends State<ComparePage> {
   void initState() {
     super.initState();
     _editingControllerTop.addListener(() {
-      print(_editingControllerTop.text);
+      if (_topFocus.hasFocus) {
+        setState(() {
+          if (_editingControllerTop.text.isNotEmpty) {
+            double sum = double.parse(topCur?.rate ?? '0') /
+                double.parse(bottomCur?.rate ?? '0') *
+                double.parse(_editingControllerTop.text);
+            _editingControllerBottom.text = sum.toStringAsFixed(2);
+          } else {
+            _editingControllerBottom.clear();
+          }
+        });
+      }
     });
     _editingControllerBottom.addListener(() {
-      print(_editingControllerBottom.text);
+      if (_bottomFocus.hasFocus) {
+        setState(() {
+          if (_editingControllerBottom.text.isNotEmpty) {
+            double sum = double.parse(bottomCur?.rate ?? '0') /
+                double.parse(topCur?.rate ?? '0') *
+                double.parse(_editingControllerBottom.text);
+            _editingControllerTop.text = sum.toStringAsFixed(2);
+          } else {
+            _editingControllerTop.clear();
+          }
+        });
+      }
     });
   }
 
@@ -35,6 +61,8 @@ class _ComparePageState extends State<ComparePage> {
   void dispose() {
     _editingControllerTop.dispose();
     _editingControllerBottom.dispose();
+    _topFocus.dispose();
+    _bottomFocus.dispose();
     super.dispose();
   }
 
@@ -120,7 +148,7 @@ class _ComparePageState extends State<ComparePage> {
                 ],
               ),
               FutureBuilder(
-                  future: _loadData(),
+                  future: _listCurrency.isEmpty ? _loadData() : null,
                   builder: ((context, snapshot) {
                     if (snapshot.hasData) {
                       return Container(
@@ -156,26 +184,37 @@ class _ComparePageState extends State<ComparePage> {
                               children: [
                                 Column(
                                   children: [
-                                    _itemExch(_editingControllerTop, topCur),
+                                    _itemExch(_editingControllerTop, topCur, _topFocus),
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    _itemExch(_editingControllerBottom, bottomCur),
+                                    _itemExch(_editingControllerBottom, bottomCur, _bottomFocus),
                                   ],
                                 ),
-                                Container(
-                                  height: 35,
-                                  width: 35,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff2d334d),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.white12),
-                                  ),
-                                  child: const Icon(
-                                    Icons.currency_exchange,
-                                    color: Colors.white,
-                                    size: 20,
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      var model = topCur?.copyWith();
+                                      topCur = bottomCur?.copyWith();
+                                      bottomCur = model;
+                                      _editingControllerTop.clear();
+                                      _editingControllerBottom.clear();
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xff2d334d),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.white12),
+                                    ),
+                                    child: const Icon(
+                                      Icons.currency_exchange,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
                                   ),
                                 )
                               ],
@@ -209,7 +248,7 @@ class _ComparePageState extends State<ComparePage> {
     );
   }
 
-  Widget _itemExch(TextEditingController controller, CurrencyModel? model) {
+  Widget _itemExch(TextEditingController controller, CurrencyModel? model, FocusNode focusNode) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -223,6 +262,7 @@ class _ComparePageState extends State<ComparePage> {
               Flexible(
                 child: TextField(
                   controller: controller,
+                  focusNode: focusNode,
                   style: kTextStyle(size: 24, fontWeight: FontWeight.bold),
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -234,15 +274,15 @@ class _ComparePageState extends State<ComparePage> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(context, Routes.currencyPage),
                 child: Container(
                   padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: const Color(0xff10a4d4)),
                   child: Row(children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        'assets/img_${model?.ccy??'usd'}.png',
+                      child: SvgPicture.asset(
+                        'assets/flags/${model?.ccy?.substring(0, 2).toLowerCase()}.svg',
                         height: 20,
                         width: 20,
                       ),
@@ -265,7 +305,7 @@ class _ComparePageState extends State<ComparePage> {
             ],
           ),
           Text(
-            '0.00',
+            controller.text.isNotEmpty ? (double.parse(controller.text) * 0.05).toStringAsFixed(2) : '0.00',
             style: kTextStyle(fontWeight: FontWeight.w600, color: Colors.white54),
           )
         ],
