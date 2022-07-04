@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:lesson1/currency/currency_model.dart';
 import 'package:lesson1/utils/constants.dart';
+import 'package:lesson1/utils/hive_util.dart';
 import 'package:lesson1/utils/routes.dart';
 
 class ComparePage extends StatefulWidget {
@@ -15,12 +18,12 @@ class ComparePage extends StatefulWidget {
   State<ComparePage> createState() => _ComparePageState();
 }
 
-class _ComparePageState extends State<ComparePage> {
+class _ComparePageState extends State<ComparePage> with HiveUtil {
   final TextEditingController _editingControllerTop = TextEditingController();
   final TextEditingController _editingControllerBottom = TextEditingController();
   final FocusNode _topFocus = FocusNode();
   final FocusNode _bottomFocus = FocusNode();
-  final List<CurrencyModel> _listCurrency = [];
+  List<CurrencyModel> _listCurrency = [];
   CurrencyModel? topCur;
   CurrencyModel? bottomCur;
 
@@ -67,28 +70,58 @@ class _ComparePageState extends State<ComparePage> {
   }
 
   Future<bool?> _loadData() async {
+    var isLoad = await loadLocalData();
+    if (isLoad) {
+      try {
+        var response = await get(Uri.parse('https://cbu.uz/uz/arkhiv-kursov-valyut/json/'));
+        if (response.statusCode == 200) {
+          for (final item in jsonDecode(response.body)) {
+            var model = CurrencyModel.fromJson(item);
+            if (model.ccy == 'USD') {
+              topCur = model;
+            } else if (model.ccy == 'RUB') {
+              bottomCur = model;
+            }
+            _listCurrency.add(model);
+            await saveBox<String>(dateBox, topCur?.date ?? '', key: dateKey);
+            await saveBox<List<dynamic>>(currencyBox, _listCurrency, key: currencyListKey);
+          }
+          return true;
+        } else {
+          _showMessage('Unknown error');
+        }
+      } on SocketException {
+        _showMessage('Connection error');
+      } catch (e) {
+        _showMessage(e.toString());
+      }
+    } else {
+      return true;
+    }
+    return null;
+  }
+
+  Future<bool> loadLocalData() async {
     try {
-      var response = await get(Uri.parse('https://cbu.uz/uz/arkhiv-kursov-valyut/json/'));
-      if (response.statusCode == 200) {
-        for (final item in jsonDecode(response.body)) {
-          var model = CurrencyModel.fromJson(item);
+      var date = await getBox<String>(dateBox, key: dateKey);
+      if (date == DateFormat('dd.MM.yyyy').format(DateTime.now().add(const Duration(days: -1)))) {
+        var list = await getBox<List<dynamic>>(currencyBox, key: currencyListKey) ?? [];
+        _listCurrency = List.castFrom<dynamic, CurrencyModel>(list);
+        for (var model in _listCurrency) {
           if (model.ccy == 'USD') {
             topCur = model;
           } else if (model.ccy == 'RUB') {
             bottomCur = model;
           }
-          _listCurrency.add(model);
         }
-        return true;
+        return false;
       } else {
-        _showMessage('Unknown error');
+        return true;
       }
-    } on SocketException {
-      _showMessage('Connection error');
     } catch (e) {
-      _showMessage(e.toString());
+      log(e.toString());
     }
-    return null;
+    return true;
   }
 
   _showMessage(String text, {bool isError = true}) {
@@ -184,11 +217,19 @@ class _ComparePageState extends State<ComparePage> {
                               children: [
                                 Column(
                                   children: [
-                                    _itemExch(_editingControllerTop, topCur, _topFocus),
+                                    _itemExch(_editingControllerTop, topCur, _topFocus, ((value) {
+                                      if (value is CurrencyModel) {
+                                        setState(() => topCur = value);
+                                      }
+                                    })),
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    _itemExch(_editingControllerBottom, bottomCur, _bottomFocus),
+                                    _itemExch(_editingControllerBottom, bottomCur, _bottomFocus, ((value) {
+                                      if (value is CurrencyModel) {
+                                        setState(() => bottomCur = value);
+                                      }
+                                    })),
                                   ],
                                 ),
                                 InkWell(
@@ -248,7 +289,7 @@ class _ComparePageState extends State<ComparePage> {
     );
   }
 
-  Widget _itemExch(TextEditingController controller, CurrencyModel? model, FocusNode focusNode) {
+  Widget _itemExch(TextEditingController controller, CurrencyModel? model, FocusNode focusNode, Function callback) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -274,7 +315,11 @@ class _ComparePageState extends State<ComparePage> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, Routes.currencyPage),
+                onTap: () => Navigator.pushNamed(context, Routes.currencyPage, arguments: {
+                  'list_curreny': _listCurrency,
+                  'top_cur': topCur?.ccy,
+                  'bottom_cur': bottomCur?.ccy
+                }).then(((value) => callback(value))),
                 child: Container(
                   padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: const Color(0xff10a4d4)),
