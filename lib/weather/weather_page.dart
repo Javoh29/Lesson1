@@ -450,48 +450,48 @@ class WaetherMainBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Flexible(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            margin: const EdgeInsets.only(top: 30),
-            decoration: BoxDecoration(
-              gradient: containerWeatherGradient,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff5264F0).withOpacity(0.31),
-                  blurRadius: 30,
-                  offset: const Offset(10, 15),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.only(top: 30),
+          decoration: BoxDecoration(
+            gradient: containerWeatherGradient,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xff5264F0).withOpacity(0.31),
+                blurRadius: 30,
+                offset: const Offset(10, 15),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Flexible(
+                child: Padding(
                   padding: const EdgeInsets.only(top: 116),
                   child: Text(
                     'Ясно asda das dasdadsadas',
                     style: kTextStyle(size: 24, fontWeight: FontWeight.w700),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    GradientText(
-                      '+21°',
-                      style: kTextStyle(size: 55, fontWeight: FontWeight.bold),
-                      gradient: textWeatherGradient,
-                    ),
-                    Text(
-                      'Очищается 26°',
-                      style: kTextStyle(size: 15, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ],
-            ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GradientText(
+                    '+21°',
+                    style: kTextStyle(size: 55, fontWeight: FontWeight.bold),
+                    gradient: textWeatherGradient,
+                  ),
+                  Text(
+                    'Очищается 26°',
+                    style: kTextStyle(size: 15, fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            ],
           ),
         ),
         Positioned(
