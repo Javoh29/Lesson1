@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../wallet_ui/price_model.dart';
 
 const String currencyBox = 'currency_box';
+const String weatherBox = 'weather_box';
+const String weeklyBox = 'weekly_box';
 const String currencyListKey = 'currency_list_key';
 const String dateBox = 'date_box';
 const String dateKey = 'date_key';

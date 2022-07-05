@@ -1,4 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
+import 'package:lesson1/utils/hive_util.dart';
+import 'package:lesson1/weather/weather_model.dart';
+import 'package:lesson1/weather/weekly_model.dart';
 import 'package:lesson1/widgets/gradient_text.dart';
 
 import '../utils/constants.dart';
@@ -10,9 +18,97 @@ class WeatherPage extends StatefulWidget {
   State<WeatherPage> createState() => _WeatherPageState();
 }
 
-class _WeatherPageState extends State<WeatherPage> {
+class _WeatherPageState extends State<WeatherPage> with HiveUtil {
   final Color textColor1 = const Color(0xff25272E);
   final Color textColor2 = const Color(0xffCBCBCB);
+  WeatherModel? _weatherModel;
+  List<WeeklyModel> _listWeekly = [];
+
+  Future<bool?> loadData(String city) async {
+    var isLoad = await loadLocalData();
+    if (!isLoad) {
+      try {
+        _listWeekly.clear();
+        var response = await get(Uri.parse("https://obhavo.uz/${city.toLowerCase()}"));
+
+        if (response.statusCode == 200) {
+          var document = parse(response.body);
+
+          var tempDoc = document.getElementsByClassName("current-forecast")[0];
+          var docDetails = document.getElementsByClassName("current-forecast-details")[0].querySelectorAll('p');
+          var wkDoc = document.getElementsByClassName("weather-row-day-short");
+          var wkTemp = document.getElementsByClassName('weather-row-forecast');
+          var wkRain = document.getElementsByClassName("weather-row-pop");
+
+          var model = WeatherModel();
+          model.temp = tempDoc.querySelectorAll('strong')[0].text.substring(1);
+          model.rain = docDetails[0].text.substring(8);
+          model.wind = docDetails[1].text.substring(8).split(",").last;
+          model.pess = docDetails[2].text.substring(7, 11);
+          model.moon = docDetails[3].text.substring(4);
+          model.sun = docDetails[4].text.substring(17);
+          model.sunset = docDetails[5].text.substring(16);
+          model.tempNight = tempDoc.querySelectorAll('span')[2].text.substring(1);
+          model.curDay = document.getElementsByClassName("current-day")[0].text.toString().substring(6);
+          model.desc = document.getElementsByClassName("current-forecast-desc")[0].text;
+
+          for (var i = 0; i < 7; i++) {
+            var wkModel = WeeklyModel();
+            wkModel.day = wkDoc[i + 1].querySelectorAll('strong')[0].text;
+            wkModel.date = wkDoc[i + 1].querySelectorAll('div')[0].text;
+            wkModel.temp = wkTemp[i].querySelectorAll('span')[0].text;
+            wkModel.desc = document.getElementsByClassName('weather-row-desc')[i + 1].text.trim();
+            wkModel.rainPer = wkRain[i + 1].text.trim().split("%")[0];
+            _listWeekly.add(wkModel);
+          }
+          _weatherModel = model;
+
+          await saveBox<String?>(dateBox, DateFormat('dd.MM.yyyy').format(DateTime.now()));
+          await saveBox<WeatherModel?>(weatherBox, _weatherModel);
+          await saveBox<List<WeeklyModel>>(weeklyBox, _listWeekly);
+
+          return true;
+        } else {
+          _showMessage('Unknown error');
+        }
+      } on SocketException {
+        _showMessage('Connection error');
+      } catch (e) {
+        _showMessage(e.toString());
+      }
+    } else {
+      return true;
+    }
+    return null;
+  }
+
+  Future<bool> loadLocalData() async {
+    try {
+      var date = await getBox<String?>(dateBox);
+      if (date != null && date == DateFormat('dd.MM.yyyy').format(DateTime.now())) {
+        _weatherModel = await getBox<WeatherModel?>(weatherBox);
+        var list = (await getBox<List<dynamic>>(weeklyBox, defaultValue: [])) ?? [];
+        _listWeekly = List.castFrom<dynamic, WeeklyModel>(list);
+        return true;
+      }
+    } catch (e) {
+      _showMessage(e.toString());
+    }
+    return false;
+  }
+
+  _showMessage(String text, {bool isError = true}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: isError ? Colors.red : Colors.green[400],
+        content: Text(
+          text,
+          style: kTextStyle(size: 15, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,57 +117,69 @@ class _WeatherPageState extends State<WeatherPage> {
           gradient: scaffoldWeatherGradient,
         ),
         child: SafeArea(
-            child: Column(
-          children: [
-            CustomAppBar(textColor1: textColor1),
-            Flexible(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                shrinkWrap: true,
-                children: [
-                  const WaetherMainBox(),
-                  WeatherInfoBox(textColor1: textColor1, textColor2: textColor2),
-                  Text(
-                    'Недельный прогноз',
-                    style: kTextStyle(color: textColor1, fontWeight: FontWeight.bold, size: 22),
-                  ),
-                  SizedBox(
-                    height: 250,
-                    child: Flexible(
+          child: FutureBuilder(
+            future: _weatherModel == null ? loadData('Ferghana') : null,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    CustomAppBar(textColor1: textColor1),
+                    Flexible(
                       child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         shrinkWrap: true,
                         children: [
-                          WeeklyItem(
-                            isActive: true,
-                            textColor1: textColor1,
-                            textColor2: textColor2,
+                          const WaetherMainBox(),
+                          WeatherInfoBox(textColor1: textColor1, textColor2: textColor2),
+                          Text(
+                            'Недельный прогноз',
+                            style: kTextStyle(color: textColor1, fontWeight: FontWeight.bold, size: 22),
                           ),
-                          WeeklyItem(
-                            isActive: false,
-                            textColor1: textColor1,
-                            textColor2: textColor2,
-                          ),
-                          WeeklyItem(
-                            isActive: false,
-                            textColor1: textColor1,
-                            textColor2: textColor2,
-                          ),
-                          WeeklyItem(
-                            isActive: false,
-                            textColor1: textColor1,
-                            textColor2: textColor2,
-                          ),
+                          SizedBox(
+                            height: 250,
+                            child: Flexible(
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(vertical: 25),
+                                shrinkWrap: true,
+                                children: [
+                                  WeeklyItem(
+                                    isActive: true,
+                                    textColor1: textColor1,
+                                    textColor2: textColor2,
+                                  ),
+                                  WeeklyItem(
+                                    isActive: false,
+                                    textColor1: textColor1,
+                                    textColor2: textColor2,
+                                  ),
+                                  WeeklyItem(
+                                    isActive: false,
+                                    textColor1: textColor1,
+                                    textColor2: textColor2,
+                                  ),
+                                  WeeklyItem(
+                                    isActive: false,
+                                    textColor1: textColor1,
+                                    textColor2: textColor2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        )),
+                    )
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
       ),
     );
   }
@@ -342,46 +450,48 @@ class WaetherMainBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          margin: const EdgeInsets.only(top: 30),
-          decoration: BoxDecoration(
-            gradient: containerWeatherGradient,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xff5264F0).withOpacity(0.31),
-                blurRadius: 30,
-                offset: const Offset(10, 15),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 116),
-                child: Text(
-                  'Ясно',
-                  style: kTextStyle(size: 24, fontWeight: FontWeight.w700),
+        Flexible(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            margin: const EdgeInsets.only(top: 30),
+            decoration: BoxDecoration(
+              gradient: containerWeatherGradient,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xff5264F0).withOpacity(0.31),
+                  blurRadius: 30,
+                  offset: const Offset(10, 15),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  GradientText(
-                    '+21°',
-                    style: kTextStyle(size: 55, fontWeight: FontWeight.bold),
-                    gradient: textWeatherGradient,
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 116),
+                  child: Text(
+                    'Ясно asda das dasdadsadas',
+                    style: kTextStyle(size: 24, fontWeight: FontWeight.w700),
                   ),
-                  Text(
-                    'Очищается 26°',
-                    style: kTextStyle(size: 15, fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
-            ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GradientText(
+                      '+21°',
+                      style: kTextStyle(size: 55, fontWeight: FontWeight.bold),
+                      gradient: textWeatherGradient,
+                    ),
+                    Text(
+                      'Очищается 26°',
+                      style: kTextStyle(size: 15, fontWeight: FontWeight.w500),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         Positioned(
