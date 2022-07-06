@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lesson1/animation/simple_anim_page.dart';
 import 'package:lesson1/currency/compare_page.dart';
 import 'package:lesson1/currency/currency_page.dart';
 import 'package:lesson1/home_page.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const comparePage = '/comparePage';
   static const currencyPage = '/currencyPage';
   static const weatherPage = '/weatherPage';
+  static const simpleAnimPage = '/simpleAnimPage';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     try {
@@ -29,6 +31,8 @@ class Routes {
           return MaterialPageRoute(builder: (context) => const SubscriptInfoPage());
         case weatherPage:
           return MaterialPageRoute(builder: (context) => const WeatherPage());
+        case simpleAnimPage:
+          return MaterialPageRoute(builder: (context) => const SimpleAnimPage());
         case comparePage:
           return MaterialPageRoute(builder: (context) => const ComparePage());
         case auctionPage:

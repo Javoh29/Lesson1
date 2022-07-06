@@ -49,7 +49,7 @@ class _WeatherPageState extends State<WeatherPage> with HiveUtil {
           model.sun = docDetails[4].text.substring(17);
           model.sunset = docDetails[5].text.substring(16);
           model.tempNight = tempDoc.querySelectorAll('span')[2].text.substring(1);
-          model.curDay = document.getElementsByClassName("current-day")[0].text.toString().substring(6);
+          model.curDay = document.getElementsByClassName("current-day")[0].text.replaceFirst(', ', '\n');
           model.desc = document.getElementsByClassName("current-forecast-desc")[0].text;
 
           for (var i = 0; i < 7; i++) {
@@ -85,7 +85,7 @@ class _WeatherPageState extends State<WeatherPage> with HiveUtil {
   Future<bool> loadLocalData() async {
     try {
       var date = await getBox<String?>(dateBox);
-      if (date != null && date == DateFormat('dd.MM.yyyy').format(DateTime.now())) {
+      if (date != null && date == DateFormat('dd.MM.yyyy').format(DateTime.now().add(Duration(days: 1)))) {
         _weatherModel = await getBox<WeatherModel?>(weatherBox);
         var list = (await getBox<List<dynamic>>(weeklyBox, defaultValue: [])) ?? [];
         _listWeekly = List.castFrom<dynamic, WeeklyModel>(list);
@@ -120,16 +120,21 @@ class _WeatherPageState extends State<WeatherPage> with HiveUtil {
           child: FutureBuilder(
             future: _weatherModel == null ? loadData('Ferghana') : null,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: [
-                    CustomAppBar(textColor1: textColor1),
+              return Column(
+                children: [
+                  CustomAppBar(
+                    textColor1: textColor1,
+                    isUpdate: snapshot.hasData,
+                  ),
+                  if (_weatherModel != null)
                     Flexible(
                       child: ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         shrinkWrap: true,
                         children: [
-                          const WaetherMainBox(),
+                          WaetherMainBox(
+                            model: _weatherModel!,
+                          ),
                           WeatherInfoBox(textColor1: textColor1, textColor2: textColor2),
                           Text(
                             'Недельный прогноз',
@@ -170,13 +175,8 @@ class _WeatherPageState extends State<WeatherPage> with HiveUtil {
                         ],
                       ),
                     )
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+                ],
+              );
             },
           ),
         ),
@@ -443,8 +443,11 @@ class InfoItem extends StatelessWidget {
 
 class WaetherMainBox extends StatelessWidget {
   const WaetherMainBox({
+    required this.model,
     Key? key,
   }) : super(key: key);
+
+  final WeatherModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -472,7 +475,7 @@ class WaetherMainBox extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 116),
                   child: Text(
-                    'Ясно asda das dasdadsadas',
+                    model.desc ?? '',
                     style: kTextStyle(size: 24, fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -481,12 +484,12 @@ class WaetherMainBox extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   GradientText(
-                    '+21°',
+                    model.temp ?? '',
                     style: kTextStyle(size: 55, fontWeight: FontWeight.bold),
                     gradient: textWeatherGradient,
                   ),
                   Text(
-                    'Очищается 26°',
+                    'Очищается ${model.tempNight}',
                     style: kTextStyle(size: 15, fontWeight: FontWeight.w500),
                   )
                 ],
@@ -497,7 +500,7 @@ class WaetherMainBox extends StatelessWidget {
         Positioned(
           left: 20,
           child: Image.asset(
-            'assets/ic_rain.png',
+            'assets/${wtypes[model.desc] ?? 'ic_sunny'}.png',
             height: 160,
             width: 160,
           ),
@@ -506,7 +509,7 @@ class WaetherMainBox extends StatelessWidget {
           top: 50,
           right: 20,
           child: Text(
-            'Сегодня\n2 июля',
+            model.curDay ?? '',
             style: kTextStyle(size: 16, fontWeight: FontWeight.w500),
             textAlign: TextAlign.end,
           ),
@@ -517,12 +520,10 @@ class WaetherMainBox extends StatelessWidget {
 }
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({
-    Key? key,
-    required this.textColor1,
-  }) : super(key: key);
+  const CustomAppBar({Key? key, required this.textColor1, required this.isUpdate}) : super(key: key);
 
   final Color textColor1;
+  final bool isUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -577,7 +578,7 @@ class CustomAppBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'Updating°',
+                  isUpdate ? 'Updated°' : 'Updating°',
                   style: kTextStyle(size: 12),
                 ),
               )

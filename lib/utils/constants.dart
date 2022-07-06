@@ -55,3 +55,9 @@ List<PriceModel> listPrices = [
   PriceModel(name: 'Shopping', date: '6:25 PM', price: 892),
   PriceModel(name: 'Parking', date: '8:25 PM', price: 200),
 ];
+
+Map<String, String> wtypes = {
+  "ochiq havo": "ic_sunny",
+  "bulutli": "ic_mist",
+  "yomg'ir": "ic_rain",
+};
