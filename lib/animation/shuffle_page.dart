@@ -37,48 +37,68 @@ class _ShufflePageState extends State<ShufflePage> {
     while (newPosition == ballPosition) {
       newPosition = Random.secure().nextInt(3) + 1;
     }
-    var sum = ballPosition + newPosition;
     Alignment cupTemp;
-    if (sum == 3) {
-      cupTemp = cup1;
-      cup1 = cup2;
-      cup2 = cupTemp;
-    } else if (sum == 4) {
-      cupTemp = cup1;
-      cup1 = cup3;
-      cup3 = cupTemp;
+    if (ballPosition == 1) {
+      if (newPosition == 2) {
+        cupTemp = cup1;
+        cup1 = cup2;
+        cup2 = cupTemp;
+        ball = Alignment(cup1.x, -0.4);
+      } else {
+        cupTemp = cup1;
+        cup1 = cup3;
+        cup3 = cupTemp;
+        ball = Alignment(cup1.x, -0.4);
+      }
+    } else if (ballPosition == 2) {
+      if (newPosition == 1) {
+        cupTemp = cup2;
+        cup2 = cup1;
+        cup1 = cupTemp;
+        ball = Alignment(cup2.x, -0.4);
+      } else {
+        cupTemp = cup2;
+        cup2 = cup3;
+        cup3 = cupTemp;
+        ball = Alignment(cup2.x, -0.4);
+      }
     } else {
-      cupTemp = cup2;
-      cup2 = cup3;
-      cup3 = cupTemp;
+      if (newPosition == 1) {
+        cupTemp = cup3;
+        cup3 = cup1;
+        cup1 = cupTemp;
+        ball = Alignment(cup3.x, -0.4);
+      } else {
+        cupTemp = cup3;
+        cup3 = cup2;
+        cup2 = cupTemp;
+        ball = Alignment(cup3.x, -0.4);
+      }
     }
-    setState(() {
-      ballPosition = newPosition;
-    });
+    setState(() {});
   }
 
-  Future ballChangePostion({int? pos}) async {
-    if (pos != null) ballPosition = pos;
+  Future ballChangePostion() async {
     if (ballPosition == 1) {
-      ball = Alignment(cup1.x, -0.4);
-      cup1 = Alignment(cup1.x, -0.7);
+      ball = const Alignment(-0.8, -0.4);
+      cup1 = const Alignment(-0.8, -0.7);
       setState(() {});
       await wait(1.5);
-      cup1 = Alignment(cup1.x, -0.5);
+      cup1 = const Alignment(-0.8, -0.5);
       setState(() {});
     } else if (ballPosition == 2) {
-      ball = Alignment(cup2.x, -0.4);
-      cup2 = Alignment(cup2.x, -0.7);
+      ball = const Alignment(0, -0.4);
+      cup2 = const Alignment(0, -0.7);
       setState(() {});
       await wait(1.5);
-      cup2 = Alignment(cup2.x, -0.5);
+      cup2 = const Alignment(0, -0.5);
       setState(() {});
     } else {
-      ball = Alignment(cup3.x, -0.4);
-      cup3 = Alignment(cup3.x, -0.7);
+      ball = const Alignment(0.8, -0.4);
+      cup3 = const Alignment(0.8, -0.7);
       setState(() {});
       await wait(1.5);
-      cup3 = Alignment(cup3.x, -0.5);
+      cup3 = const Alignment(0.8, -0.5);
       setState(() {});
     }
     await wait(1);
@@ -109,16 +129,15 @@ class _ShufflePageState extends State<ShufflePage> {
             duration: const Duration(milliseconds: 1000),
             child: GestureDetector(
               onTap: () {
-                isShowBall = true;
-                if (ballPosition == 1) {
-                  ballChangePostion(pos: 1);
-                } else {
-                  ballChangePostion();
-                }
+                setState(() {
+                  isShowBall = true;
+                  cup1 = Alignment(cup1.x, -0.7);
+                });
               },
               child: Image.asset(
                 'assets/cup.png',
                 width: 80,
+                color: Colors.red,
               ),
             ),
           ),
@@ -127,16 +146,15 @@ class _ShufflePageState extends State<ShufflePage> {
             duration: const Duration(milliseconds: 1000),
             child: GestureDetector(
               onTap: () {
-                isShowBall = true;
-                if (ballPosition == 2) {
-                  ballChangePostion(pos: 2);
-                } else {
-                  ballChangePostion();
-                }
+                setState(() {
+                  isShowBall = true;
+                  cup2 = Alignment(cup2.x, -0.7);
+                });
               },
               child: Image.asset(
                 'assets/cup.png',
                 width: 80,
+                color: Colors.green,
               ),
             ),
           ),
@@ -145,16 +163,15 @@ class _ShufflePageState extends State<ShufflePage> {
             duration: const Duration(milliseconds: 1000),
             child: GestureDetector(
               onTap: () {
-                isShowBall = true;
-                if (ballPosition == 3) {
-                  ballChangePostion(pos: 3);
-                } else {
-                  ballChangePostion();
-                }
+                setState(() {
+                  isShowBall = true;
+                  cup3 = Alignment(cup3.x, -0.7);
+                });
               },
               child: Image.asset(
                 'assets/cup.png',
                 width: 80,
+                color: Colors.blue,
               ),
             ),
           ),
