@@ -19,6 +19,7 @@ class _SimpleAnimPageState extends State<SimpleAnimPage> with SingleTickerProvid
   late Animation animColor;
   late Animation animBorder;
   double height = 200;
+  bool isVisible = true;
   @override
   void initState() {
     super.initState();
@@ -62,14 +63,22 @@ class _SimpleAnimPageState extends State<SimpleAnimPage> with SingleTickerProvid
       body: Center(
         child: Column(
           children: [
-            TextButton(onPressed: () => setState(() => height = 400), child: Text('Sized')),
-            AnimatedSize(
-              duration: Duration(seconds: 4),
-              child: Container(
-                height: height,
-                width: 200,
-                decoration: BoxDecoration(borderRadius: animBorderRadius.value, color: Colors.red),
-              ),
+            TextButton(onPressed: () => setState(() => isVisible = !isVisible), child: Text('Sized')),
+            AnimatedSwitcher(
+              duration: const Duration(seconds: 1),
+              child: isVisible
+                  ? Container(
+                      key: Key("loading"),
+                      height: height,
+                      width: 200,
+                      decoration: BoxDecoration(borderRadius: animBorderRadius.value, color: Colors.red),
+                    )
+                  : Container(
+                      key: Key("normal"),
+                      height: 100,
+                      width: 100,
+                      color: Colors.blue,
+                    ),
             ),
           ],
         ),
