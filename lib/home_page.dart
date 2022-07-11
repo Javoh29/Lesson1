@@ -20,6 +20,14 @@ class HomePage extends StatelessWidget {
           children: [
             MaterialButton(
               color: Colors.blue,
+              onPressed: () => Navigator.pushNamed(context, Routes.calcApp),
+              child: Text(
+                'Calculate Page',
+                style: kTextStyle(color: Colors.black87),
+              ),
+            ),
+            MaterialButton(
+              color: Colors.blue,
               onPressed: () => Navigator.pushNamed(context, Routes.shufflePage),
               child: Text(
                 'Shuffle Page',

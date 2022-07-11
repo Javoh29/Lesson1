@@ -10,8 +10,8 @@ import 'package:lesson1/trackizer/subscript_info_page.dart';
 import 'package:lesson1/weather/weather_page.dart';
 import 'package:lesson1/widgets/example_page.dart';
 
-import '../animation/mainPage.dart';
 import '../animation/shuffle_build_page.dart';
+import '../calculate/caluclate_page.dart';
 
 class Routes {
   static const subscriptInfoPage = '/subscriptInfoPage';
@@ -25,6 +25,7 @@ class Routes {
   static const simpleAnimPage = '/simpleAnimPage';
   static const examplePage = '/examplePage';
   static const shufflePage = '/shufflePage';
+  static const calcApp = '/calcApp';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     try {
@@ -47,6 +48,8 @@ class Routes {
           return MaterialPageRoute(builder: (context) => const AuctionPage());
         case lessonPage:
           return MaterialPageRoute(builder: (context) => const LessonPage());
+        case calcApp:
+          return MaterialPageRoute(builder: (context) => const CalcApp());
         case shufflePage:
           return MaterialPageRoute(builder: (context) => const ShuffleBuildPage());
         case currencyPage:
